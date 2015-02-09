@@ -28,7 +28,6 @@ rgb.palette <- colorRampPalette(c("blue", "yellow"), space = "rgb")
 
 levelplot(corTab, main="stage 12-14 array correlation matrix", xlab="", ylab="", col.regions=rgb.palette(120), cuts=100, at=seq(0,1,0.01))
 
-
           
 which(corTab > 0.5 && row != col, arr.ind = T)          
           
@@ -49,4 +48,16 @@ with( trainData[trainData$target==0,], qplot (var_8, var_18, geom='jitter'))
 cdata <- data[, 1:11]
 
 distance <- dist(cdata[,1:4])
+hc <- hclust(distance, "ave")
+cut <- cutree(hc, 4)
+
+dend <- as.dendrogram(hc)
+labels_colors(dend) <- colorCodes[cdata[,1]][order.dendrogram(dend)]
+
+
+# kmeans sample
+keamsObj <- kmeans(data[,4:7], centers = 3, nstart = 1)
+plot(data[, 4], data[, 5], col = keamsObj$cluster)
+points(keamsObj$centers, col=1:3)
+
 
